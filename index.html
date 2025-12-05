@@ -14,7 +14,8 @@
     <meta property="og:title" content="WorldEdit Converter beta">
     <meta property="og:description"
         content="Minecraft Schematicファイル(.nbt, .schem)、Minetest WorldEdit(.we)、3Dモデル(.obj, .stl)をMulticraftのWorldEditコマンドに変換するツール">
-    <meta property="og:image" content="https://raw.githubusercontent.com/dark-multicraft/scheme-convertor/main/assets/ogp.png">
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/dark-multicraft/scheme-convertor/main/assets/ogp.png">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
@@ -2372,7 +2373,7 @@
         }
 
         function createLink(commands, fileName) {
-            const commandText = commands.join('\n');
+            const commandText = commands.join('\n') + '\n'; // 末尾に改行を追加して最後のコマンドも実行されるようにする
             const blob = new Blob([commandText], { type: 'text/plain' });
 
             // コンテナを作成
@@ -2403,7 +2404,9 @@
             copyBtn.textContent = 'コピー';
             copyBtn.addEventListener('click', async () => {
                 try {
-                    await navigator.clipboard.writeText(commandText);
+                    // ゲーム用にCR+LF(Windows改行)をLFのみに変換
+                    const gameReadyText = commandText.replace(/\r\n/g, '\n').replace(/\r/g, '');
+                    await navigator.clipboard.writeText(gameReadyText);
                     copyBtn.textContent = 'コピー完了！';
                     copyBtn.classList.add('copied');
                     log(`コピーしました: ${fileName}`, 'success');
@@ -2585,7 +2588,32 @@
                     // Update UI with actual resolution used for this file
                     resInput.value = resolution;
 
-                    const colorMode = document.getElementById('colorMode').value;
+                    // 頂点カラーの有無を自動検出してカラーモードを設定
+                    const colors = geometry.getAttribute('color');
+                    const hasVertexColors = colors !== null && colors !== undefined;
+                    const colorModeSelect = document.getElementById('colorMode');
+
+                    // カラーブロックオプションの有効/無効を切り替え
+                    const colorOptions = colorModeSelect.querySelectorAll('option');
+                    colorOptions.forEach(option => {
+                        if (option.value !== 'single') {
+                            option.disabled = !hasVertexColors;
+                        }
+                    });
+
+                    if (hasVertexColors) {
+                        // 頂点カラーがある場合は「すべてのカラーブロック」を選択
+                        colorModeSelect.value = 'all';
+                        blockIdGroup.style.display = 'none';
+                        log('頂点カラーを検出 - カラーブロックモードを自動選択', 'success');
+                    } else {
+                        // 頂点カラーがない場合は「単一ブロック」を選択
+                        colorModeSelect.value = 'single';
+                        blockIdGroup.style.display = 'block';
+                        log('頂点カラーなし - 単一ブロックモードを自動選択');
+                    }
+
+                    const colorMode = colorModeSelect.value;
                     current3DVoxels = voxelizeMesh(geometry, resolution, colorMode);
                     currentBlocks = [];
                     updateStatus('blockCount', current3DVoxels.length);

@@ -2382,7 +2382,7 @@
         }
 
         function createLink(commands, fileName) {
-            const commandText = commands.join('\n');
+            const commandText = commands.join('\n') + '\n'; // Add trailing newline so last command executes
             const blob = new Blob([commandText], { type: 'text/plain' });
 
             // コンテナを作成
@@ -2413,7 +2413,9 @@
             copyBtn.textContent = 'Copy';
             copyBtn.addEventListener('click', async () => {
                 try {
-                    await navigator.clipboard.writeText(commandText);
+                    // Convert CR+LF (Windows line breaks) to LF only for game compatibility
+                    const gameReadyText = commandText.replace(/\r\n/g, '\n').replace(/\r/g, '');
+                    await navigator.clipboard.writeText(gameReadyText);
                     copyBtn.textContent = 'Copied!';
                     copyBtn.classList.add('copied');
                     log(`Copied: ${fileName}`, 'success');
@@ -2595,7 +2597,32 @@
                     // Update UI with actual resolution used for this file
                     resInput.value = resolution;
 
-                    const colorMode = document.getElementById('colorMode').value;
+                    // Auto-detect vertex colors and set color mode accordingly
+                    const colors = geometry.getAttribute('color');
+                    const hasVertexColors = colors !== null && colors !== undefined;
+                    const colorModeSelect = document.getElementById('colorMode');
+
+                    // Enable/disable color block options based on vertex colors
+                    const colorOptions = colorModeSelect.querySelectorAll('option');
+                    colorOptions.forEach(option => {
+                        if (option.value !== 'single') {
+                            option.disabled = !hasVertexColors;
+                        }
+                    });
+
+                    if (hasVertexColors) {
+                        // Vertex colors detected - select color block mode
+                        colorModeSelect.value = 'all';
+                        blockIdGroup.style.display = 'none';
+                        log('Vertex colors detected - auto-selecting color block mode', 'success');
+                    } else {
+                        // No vertex colors - select single block mode
+                        colorModeSelect.value = 'single';
+                        blockIdGroup.style.display = 'block';
+                        log('No vertex colors - auto-selecting single block mode');
+                    }
+
+                    const colorMode = colorModeSelect.value;
                     current3DVoxels = voxelizeMesh(geometry, resolution, colorMode);
                     currentBlocks = [];
                     updateStatus('blockCount', current3DVoxels.length);
