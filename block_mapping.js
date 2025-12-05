@@ -225,6 +225,125 @@ const BLOCK_MAPPING = {
     "minecraft:stone_brick_slab": "stairs:slab_default_stonebrick",
     "minecraft:sandstone_slab": "stairs:slab_default_sandstone",
     "minecraft:quartz_slab": "stairs:slab_default_quartz_block",
+
+    // === 松明・照明 ===
+    "minecraft:torch": "default:torch",
+    "minecraft:wall_torch": "default:torch",
+    "minecraft:lantern": "lanterns:lantern_off",
+    "minecraft:soul_lantern": "lanterns:lantern_off",
+    "minecraft:redstone_lamp": "default:glowstone",
+    "minecraft:lit_redstone_lamp": "default:glowstone",
+
+    // === はしご ===
+    "minecraft:ladder": "default:ladder_wood",
+
+    // === フェンス ===
+    "minecraft:fence": "default:fence_wood",
+    "minecraft:oak_fence": "default:fence_wood",
+    "minecraft:spruce_fence": "default:fence_pine_wood",
+    "minecraft:birch_fence": "default:fence_birch_wood",
+    "minecraft:jungle_fence": "default:fence_jungle_wood",
+    "minecraft:acacia_fence": "default:fence_acacia_wood",
+    "minecraft:dark_oak_fence": "default:fence_wood",
+    "minecraft:nether_brick_fence": "default:fence_wood",
+
+    // === フェンスゲート ===
+    "minecraft:fence_gate": "doors:gate_wood",
+    "minecraft:oak_fence_gate": "doors:gate_wood",
+    "minecraft:spruce_fence_gate": "doors:gate_pine_wood",
+    "minecraft:birch_fence_gate": "doors:gate_birch_wood",
+    "minecraft:jungle_fence_gate": "doors:gate_jungle_wood",
+    "minecraft:acacia_fence_gate": "doors:gate_acacia_wood",
+    "minecraft:dark_oak_fence_gate": "doors:gate_wood",
+
+    // === ドア ===
+    "minecraft:wooden_door": "doors:door_wood",
+    "minecraft:oak_door": "doors:door_wood",
+    "minecraft:spruce_door": "doors:door_pine_wood",
+    "minecraft:birch_door": "doors:door_birch_wood",
+    "minecraft:jungle_door": "doors:door_jungle_wood",
+    "minecraft:acacia_door": "doors:door_acacia_wood",
+    "minecraft:dark_oak_door": "doors:door_wood",
+    "minecraft:iron_door": "doors:door_steel",
+
+    // === トラップドア ===
+    "minecraft:trapdoor": "doors:trapdoor",
+    "minecraft:oak_trapdoor": "doors:trapdoor",
+    "minecraft:spruce_trapdoor": "doors:trapdoor_pine_wood",
+    "minecraft:birch_trapdoor": "doors:trapdoor_birch_wood",
+    "minecraft:jungle_trapdoor": "doors:trapdoor_jungle_wood",
+    "minecraft:acacia_trapdoor": "doors:trapdoor_acacia_wood",
+    "minecraft:dark_oak_trapdoor": "doors:trapdoor",
+    "minecraft:iron_trapdoor": "doors:trapdoor_steel",
+
+    // === ベッド ===
+    "minecraft:bed": "beds:bed_red",
+    "minecraft:white_bed": "beds:bed_white",
+    "minecraft:orange_bed": "beds:bed_orange",
+    "minecraft:magenta_bed": "beds:bed_magenta",
+    "minecraft:light_blue_bed": "beds:bed_cyan",
+    "minecraft:yellow_bed": "beds:bed_yellow",
+    "minecraft:lime_bed": "beds:bed_green",
+    "minecraft:pink_bed": "beds:bed_pink",
+    "minecraft:gray_bed": "beds:bed_grey",
+    "minecraft:light_gray_bed": "beds:bed_grey",
+    "minecraft:cyan_bed": "beds:bed_cyan",
+    "minecraft:purple_bed": "beds:bed_violet",
+    "minecraft:blue_bed": "beds:bed_blue",
+    "minecraft:brown_bed": "beds:bed_brown",
+    "minecraft:green_bed": "beds:bed_dark_green",
+    "minecraft:red_bed": "beds:bed_red",
+    "minecraft:black_bed": "beds:bed_black",
+
+    // === レール ===
+    "minecraft:rail": "carts:rail",
+    "minecraft:golden_rail": "carts:rail",
+    "minecraft:powered_rail": "carts:rail",
+    "minecraft:detector_rail": "carts:rail",
+    "minecraft:activator_rail": "carts:rail",
+
+    // === TNT ===
+    "minecraft:tnt": "tnt:tnt",
+
+    // === ガラス板・鉄格子 ===
+    "minecraft:stained_glass_pane": "xpanes:pane_flat",
+    "minecraft:iron_bars": "xpanes:bar_flat",
+
+    // === クモの巣 ===
+    "minecraft:web": "mobs_monsters:cobweb",
+    "minecraft:cobweb": "mobs_monsters:cobweb",
+
+    // === サンゴブロック ===
+    "minecraft:tube_coral_block": "ocean:coral_blue_tubular_block",
+    "minecraft:brain_coral_block": "ocean:coral_pink_acropora_block",
+    "minecraft:bubble_coral_block": "ocean:coral_yellow_fiery_block",
+    "minecraft:fire_coral_block": "ocean:coral_red_rubrum_block",
+    "minecraft:horn_coral_block": "ocean:coral_yellow_fiery_block",
+
+    // === 看板 ===
+    "minecraft:standing_sign": "signs:sign",
+    "minecraft:wall_sign": "signs:sign",
+    "minecraft:oak_sign": "signs:sign",
+    "minecraft:spruce_sign": "signs:sign_pine_wood",
+    "minecraft:birch_sign": "signs:sign_birch_wood",
+    "minecraft:jungle_sign": "signs:sign_junglewood",
+    "minecraft:acacia_sign": "signs:sign_acacia_wood",
+    "minecraft:dark_oak_sign": "signs:sign",
+
+    // === その他の追加ブロック ===
+    "minecraft:bamboo": "water_plants:bamboo",
+    "minecraft:lily_pad": "swamp_biome:waterlily",
+    "minecraft:waterlily": "swamp_biome:waterlily",
+    "minecraft:jack_o_lantern": "farming_plants:pumpkin_fruit",
+    "minecraft:lit_pumpkin": "farming_plants:pumpkin_fruit",
+    "minecraft:carved_pumpkin": "farming_plants:pumpkin_fruit",
+    "minecraft:jukebox": "default:chest",
+    "minecraft:enchanting_table": "x_enchanting:table",
+    "minecraft:brewing_stand": "brewing:stand",
+    "minecraft:armor_stand": "3d_armor_stand:armor_stand",
+    "minecraft:flower_pot": "flowers:pot",
+    "minecraft:painting": "painting:painting",
+    "minecraft:item_frame": "itemframes:frame",
 };
 
 // Function to get multicraft block name from minecraft block name
