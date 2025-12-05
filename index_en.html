@@ -945,6 +945,125 @@
             flex-shrink: 0;
             margin-top: auto;
         }
+
+        /* Responsive design - Tablet & Smartphone support */
+        @media screen and (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+
+            .panel {
+                border-left: none;
+                border-bottom: 1px solid #e8e8e8;
+            }
+
+            .left-panel {
+                overflow-y: visible;
+            }
+
+            .right-panel {
+                min-height: 50vh;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .panel {
+                padding: 16px;
+            }
+
+            h1 {
+                font-size: 1rem;
+            }
+
+            .drop-zone {
+                padding: 20px 12px;
+            }
+
+            .drop-zone-text {
+                font-size: 0.85rem;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                padding: 14px 16px;
+                font-size: 1rem;
+            }
+
+            .action-section {
+                flex-direction: column;
+            }
+
+            .download-item {
+                padding: 12px;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .download-link,
+            .copy-btn {
+                width: 100%;
+                text-align: center;
+                padding: 12px;
+            }
+
+            .unknown-item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            /* Full-screen preview modal */
+            .preview-modal-content {
+                width: 95%;
+                height: 90%;
+                max-width: none;
+            }
+
+            .preview-controls {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Touch device adjustments */
+        @media (hover: none) and (pointer: coarse) {
+            .drop-zone {
+                padding: 24px 16px;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                min-height: 48px;
+            }
+
+            .setting-group input,
+            .setting-group select {
+                min-height: 44px;
+                font-size: 16px;
+                /* Prevent iOS zoom */
+            }
+
+            .unknown-input {
+                min-height: 44px;
+                font-size: 16px;
+            }
+
+            .autocomplete-item {
+                padding: 12px 10px;
+            }
+        }
     </style>
 </head>
 
@@ -2902,6 +3021,49 @@
             const zoomFactor = e.deltaY > 0 ? 1.1 : 0.9;
             previewCamera.position.z *= zoomFactor;
             previewCamera.position.z = Math.max(1, Math.min(10000, previewCamera.position.z));
+        });
+
+        // Touch controls for mobile devices
+        let touchStartDist = 0;
+        previewCanvas.addEventListener('touchstart', e => {
+            e.preventDefault();
+            if (e.touches.length === 1) {
+                previewCtrl.drag = true;
+                previewCtrl.lx = e.touches[0].clientX;
+                previewCtrl.ly = e.touches[0].clientY;
+            } else if (e.touches.length === 2) {
+                // Pinch zoom start
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                touchStartDist = Math.sqrt(dx * dx + dy * dy);
+            }
+        }, { passive: false });
+
+        previewCanvas.addEventListener('touchmove', e => {
+            e.preventDefault();
+            if (e.touches.length === 1 && previewCtrl.drag) {
+                // Single finger: rotate
+                previewCtrl.rx += (e.touches[0].clientX - previewCtrl.lx) * 0.005;
+                previewCtrl.ry += (e.touches[0].clientY - previewCtrl.ly) * 0.005;
+                previewCtrl.lx = e.touches[0].clientX;
+                previewCtrl.ly = e.touches[0].clientY;
+            } else if (e.touches.length === 2) {
+                // Two fingers: pinch zoom
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (touchStartDist > 0) {
+                    const zoomFactor = touchStartDist / dist;
+                    previewCamera.position.z *= zoomFactor;
+                    previewCamera.position.z = Math.max(1, Math.min(10000, previewCamera.position.z));
+                }
+                touchStartDist = dist;
+            }
+        }, { passive: false });
+
+        previewCanvas.addEventListener('touchend', e => {
+            previewCtrl.drag = false;
+            touchStartDist = 0;
         });
 
         previewBtn.addEventListener('click', openPreview);
