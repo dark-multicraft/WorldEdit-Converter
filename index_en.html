@@ -960,7 +960,7 @@
                     <div class="drop-zone-text">Drop or click to select a file</div>
                     <div class="drop-zone-hint">.nbt .schem .we .obj .stl</div>
                 </div>
-                <input type="file" id="fileInput" accept=".nbt,.schem,.we,.obj,.stl,.mtl" multiple>
+                <input type="file" id="fileInput" accept=".nbt,.schem,.we,.obj,.stl,.mtl,*/*" multiple>
             </div>
 
             <div class="status-bar" id="statusBar" style="display:none;">
@@ -2382,7 +2382,7 @@
         }
 
         function createLink(commands, fileName) {
-            const commandText = commands.join('\n') + '\n'; // Add trailing newline so last command executes
+            const commandText = commands.join('\n');
             const blob = new Blob([commandText], { type: 'text/plain' });
 
             // コンテナを作成
@@ -2413,9 +2413,7 @@
             copyBtn.textContent = 'Copy';
             copyBtn.addEventListener('click', async () => {
                 try {
-                    // Convert CR+LF (Windows line breaks) to LF only for game compatibility
-                    const gameReadyText = commandText.replace(/\r\n/g, '\n').replace(/\r/g, '');
-                    await navigator.clipboard.writeText(gameReadyText);
+                    await navigator.clipboard.writeText(commandText);
                     copyBtn.textContent = 'Copied!';
                     copyBtn.classList.add('copied');
                     log(`Copied: ${fileName}`, 'success');
