@@ -12,7 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/loaders/OBJLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/loaders/MTLLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/loaders/STLLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/loaders/PLYLoader.js"></script>
     <style>
         * {
             margin: 0;
@@ -896,9 +895,9 @@
                 <div class="drop-zone-content">
                     <div class="drop-zone-icon">+</div>
                     <div class="drop-zone-text">ファイルをドロップまたはクリック</div>
-                    <div class="drop-zone-hint">.nbt .schem .obj .stl</div>
+                    <div class="drop-zone-hint">.nbt .schem .we .obj .stl</div>
                 </div>
-                <input type="file" id="fileInput" accept=".nbt,.schem,.obj,.stl,.mtl" multiple>
+                <input type="file" id="fileInput" accept=".nbt,.schem,.we,.obj,.stl,.mtl" multiple>
             </div>
 
             <div class="status-bar" id="statusBar" style="display:none;">
@@ -1243,6 +1242,7 @@
         let userMappings = {};
         let currentFileName = '';
         let is3DModel = false;
+        let isWorldEdit = false;
         let userResolutionLocked = false;
         let currentGeometry = null;
 
@@ -1408,6 +1408,70 @@
                     }
                 }
             }
+            return blocks;
+        }
+
+        // ========== WorldEdit (.we) Load ==========
+        function loadWorldEdit(text) {
+            // WorldEdit format: "5:return {{["z"] = 0, ["y"] = 0, ["name"] = "block:id", ["x"] = 0}, ...}"
+            const blocks = [];
+            
+            // バージョン番号と"return"を除去してテーブル部分を取得
+            const match = text.match(/^\d+:return\s*\{(.*)\}\s*$/s);
+            if (!match) {
+                throw new Error('Invalid WorldEdit format');
+            }
+            
+            const tableContent = match[1];
+            
+            // 各ブロックエントリを抽出
+            // パターン: {["z"] = 0, ["param2"] = 8, ["y"] = 0, ["param1"] = 15, ["name"] = "...", ["x"] = 0}
+            let depth = 0;
+            let start = -1;
+            const entries = [];
+            
+            for (let i = 0; i < tableContent.length; i++) {
+                const ch = tableContent[i];
+                if (ch === '{') {
+                    if (depth === 0) start = i;
+                    depth++;
+                } else if (ch === '}') {
+                    depth--;
+                    if (depth === 0 && start !== -1) {
+                        entries.push(tableContent.substring(start + 1, i));
+                        start = -1;
+                    }
+                }
+            }
+            
+            for (const entry of entries) {
+                // 各フィールドを抽出
+                const xMatch = entry.match(/\["x"\]\s*=\s*(-?\d+)/);
+                const yMatch = entry.match(/\["y"\]\s*=\s*(-?\d+)/);
+                const zMatch = entry.match(/\["z"\]\s*=\s*(-?\d+)/);
+                const nameMatch = entry.match(/\["name"\]\s*=\s*"([^"]+)"/);
+                
+                if (xMatch && yMatch && zMatch && nameMatch) {
+                    const x = parseInt(xMatch[1]);
+                    const y = parseInt(yMatch[1]);
+                    const z = parseInt(zMatch[1]);
+                    const name = nameMatch[1];
+                    
+                    // param2（回転情報）があれば取得
+                    const param2Match = entry.match(/\["param2"\]\s*=\s*(\d+)/);
+                    const param2 = param2Match ? parseInt(param2Match[1]) : 0;
+                    
+                    // airブロックはスキップ
+                    if (name !== 'air' && !name.endsWith(':air')) {
+                        blocks.push([x, y, z, name, param2]);
+                    }
+                }
+            }
+            
+            if (blocks.length === 0) {
+                throw new Error('No blocks found in WorldEdit file');
+            }
+            
             return blocks;
         }
 
@@ -1901,8 +1965,18 @@
             });
 
             for (let i = 0; i < sorted.length; i++) {
-                const [x, y, z, name] = sorted[i];
-                const [cmd, param2] = getMulticraftBlock(name);
+                const block = sorted[i];
+                const [x, y, z, name] = block;
+                
+                let cmd, param2;
+                if (isWorldEdit) {
+                    // WorldEdit形式: ブロックIDはそのまま使用、param2は5番目の要素
+                    cmd = name;
+                    param2 = block[4] || 0;
+                } else {
+                    // Minecraft形式: マッピングを通す
+                    [cmd, param2] = getMulticraftBlock(name);
+                }
                 if (cmd === null) { skipped++; continue; }
 
                 const axes = ['x', 'y', 'z'];
@@ -2111,13 +2185,14 @@
             try {
                 userResolutionLocked = false;
                 currentGeometry = null;
+                isWorldEdit = false;
                 currentFileName = file.name;
                 const ext = file.name.split('.').pop().toLowerCase();
                 log(`読み込み: ${file.name}`);
                 updateStatus('fileName', file.name);
                 setProgress(0);
 
-                if (['obj', 'stl', 'ply'].includes(ext)) {
+                if (['obj', 'stl'].includes(ext)) {
                     is3DModel = true;
                     log('3Dモデルを読み込み中...', 'success');
                     const geometry = await load3DModel(file);
@@ -2157,8 +2232,21 @@
                     updateStatus('blockCount', current3DVoxels.length);
                     update3DSettingsVisibility();
                     convertBtn.disabled = false;
+                } else if (ext === 'we') {
+                    // WorldEdit形式
+                    is3DModel = false;
+                    isWorldEdit = true;
+                    update3DSettingsVisibility();
+                    const text = await file.text();
+                    currentBlocks = loadWorldEdit(text);
+                    current3DVoxels = [];
+                    updateStatus('blockCount', currentBlocks.length);
+                    log(`WorldEditファイル読み込み: ${currentBlocks.length}ブロック`, 'success');
+                    // WorldEdit形式はブロックIDがそのまま使えるので未対応チェック不要
+                    convertBtn.disabled = false;
                 } else {
                     is3DModel = false;
+                    isWorldEdit = false;
                     update3DSettingsVisibility();
                     const buf = await file.arrayBuffer();
                     let data;
