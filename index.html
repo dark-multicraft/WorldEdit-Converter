@@ -65,6 +65,24 @@
             border-left: none;
         }
 
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-panel .log-panel {
+            flex: 1;
+            min-height: 100px;
+        }
+
+        .action-section {
+            display: flex;
+            gap: 10px;
+            padding-top: 16px;
+            margin-top: auto;
+            border-top: 1px solid #eee;
+        }
+
         h1 {
             font-size: 1.1rem;
             font-weight: 600;
@@ -215,15 +233,19 @@
 
         .settings-nbt.visible {
             display: flex;
+            flex: 1;
+            overflow-y: auto;
         }
 
         .settings-nbt .unknown-list {
-            flex: 1;
+            flex: 0 1 auto;
             overflow-y: auto;
             border: 1px solid #e0e0e0;
             border-radius: 4px;
             padding: 8px;
             background: #fafafa;
+            min-height: 50px;
+            max-height: 400px;
         }
 
 
@@ -355,6 +377,123 @@
             margin-top: 6px;
         }
 
+        .unknown-actions {
+            display: inline-flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .unknown-action-btn {
+            background: none;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .unknown-action-btn:hover {
+            background: #f0f0f0;
+            border-color: #aaa;
+        }
+
+        .settings-group-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Import Modal */
+        .import-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .import-modal.active {
+            display: flex;
+        }
+
+        .import-modal-content {
+            background: #fff;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .import-modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .import-modal-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .import-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .import-modal-body {
+            padding: 16px 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .import-modal-hint {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .import-modal-hint code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'SF Mono', Consolas, monospace;
+            font-size: 0.8rem;
+        }
+
+        #importTextarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'SF Mono', Consolas, monospace;
+            font-size: 0.85rem;
+            resize: vertical;
+        }
+
+        .import-modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
         .unknown-list {
             flex: 1;
             overflow-y: auto;
@@ -411,7 +550,7 @@
             border-radius: 0 0 4px 4px;
             max-height: 200px;
             overflow-y: auto;
-            z-index: 100;
+            z-index: 1000;
             display: none;
         }
 
@@ -1072,6 +1211,101 @@
                 padding: 12px 10px;
             }
         }
+
+        /* カスタム変換セクション */
+        .settings-custom-convert {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+        }
+
+        .custom-convert-checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .custom-convert-checkbox-wrapper input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .custom-convert-checkbox-wrapper label {
+            font-size: 0.85rem;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .custom-convert-hint {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .custom-convert-list {
+            margin-top: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .custom-convert-entry {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto;
+            gap: 8px;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .custom-convert-arrow {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .custom-convert-remove-btn {
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            line-height: 1;
+        }
+
+        .custom-convert-remove-btn:hover {
+            color: #d44;
+        }
+
+        .custom-convert-add-btn {
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: #fff;
+            color: #333;
+            border: 1px dashed #bbb;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.15s;
+        }
+
+        .custom-convert-add-btn:hover {
+            background: #f5f5f5;
+            border-color: #888;
+        }
+
+        @media screen and (max-width: 600px) {
+            .custom-convert-entry {
+                grid-template-columns: 1fr auto;
+                gap: 6px;
+            }
+
+            .custom-convert-arrow {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -1133,22 +1367,32 @@
                 </div>
 
                 <div class="settings-nbt" id="settingsNBT">
-                    <div class="settings-group-title">未対応ブロック</div>
-                    <div class="unknown-hint">空欄=デフォルト / air=スキップ</div>
-                    <div class="unknown-list" id="unknownList"></div>
-                </div>
-            </div>
+                    <div class="settings-custom-convert" id="settingsCustomConvert">
+                        <div class="custom-convert-checkbox-wrapper">
+                            <input type="checkbox" id="customConvertEnabled">
+                            <label for="customConvertEnabled">カスタム変換を有効にする</label>
+                        </div>
+                        <div class="custom-convert-hint" id="customConvertHint" style="display:none;">
+                            任意のブロックを別のブロックに置換できます（空欄=変換なし / air=スキップ）
+                        </div>
+                        <div class="custom-convert-list" id="customConvertList" style="display:none;"></div>
+                        <button class="custom-convert-add-btn" id="customConvertAddBtn" style="display:none;">
+                            + 変換ルールを追加
+                        </button>
+                    </div>
 
-            <div class="action-section">
-                <button class="btn-primary" id="convertBtn" disabled>変換</button>
-                <button class="btn-secondary" id="previewBtn" disabled>プレビュー</button>
-            </div>
-
-            <div class="progress-section" id="progressSection" style="display:none;">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
+                    <div id="unknownBlocksSection">
+                        <div class="settings-group-title">
+                            未対応ブロック
+                            <div class="unknown-actions">
+                                <button class="unknown-action-btn" id="exportUnknownBtn" title="エクスポート">📋</button>
+                                <button class="unknown-action-btn" id="importUnknownBtn" title="インポート">📥</button>
+                            </div>
+                        </div>
+                        <div class="unknown-hint">空欄=デフォルト / air=スキップ</div>
+                        <div class="unknown-list" id="unknownList"></div>
+                    </div>
                 </div>
-                <div class="progress-label" id="commandCount"></div>
             </div>
         </div>
 
@@ -1159,6 +1403,18 @@
             </div>
             <div class="log-panel" id="logPanel"></div>
             <div class="download-area" id="downloadArea"></div>
+
+            <div class="progress-section" id="progressSection" style="display:none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-label" id="commandCount"></div>
+            </div>
+
+            <div class="action-section">
+                <button class="btn-primary" id="convertBtn" disabled>変換</button>
+                <button class="btn-secondary" id="previewBtn" disabled>プレビュー</button>
+            </div>
         </div>
     </div><!-- Preview Modal -->
     <div class="preview-modal" id="previewModal">
@@ -1173,6 +1429,27 @@
             <div class="preview-controls">
                 <button id="resetViewBtn">リセット</button>
                 <button id="toggleWireBtn">ワイヤー表示</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Unknown Blocks Modal -->
+    <div class="import-modal" id="importModal">
+        <div class="import-modal-content">
+            <div class="import-modal-header">
+                <span class="import-modal-title">未対応ブロックのインポート</span>
+                <button class="import-modal-close" id="importModalClose">&times;</button>
+            </div>
+            <div class="import-modal-body">
+                <div class="import-modal-hint">
+                    形式: <code>元ブロック -&gt; 変換先</code> (1行に1つ)<br>
+                    例: <code>minecraft:deepslate -> default:stone</code>
+                </div>
+                <textarea id="importTextarea" placeholder="ここにテキストを貼り付け..."></textarea>
+            </div>
+            <div class="import-modal-footer">
+                <button class="btn-secondary" id="importCancelBtn">キャンセル</button>
+                <button class="btn-primary" id="importApplyBtn">適用</button>
             </div>
         </div>
     </div>
@@ -1349,10 +1626,6 @@
 
             // === その他ブロック ===
             "minecraft:bedrock": "default:stone",
-            "minecraft:water": "default:water_source",
-            "minecraft:flowing_water": "default:water_flowing",
-            "minecraft:lava": "default:lava_source",
-            "minecraft:flowing_lava": "default:lava_flowing",
             "minecraft:sponge": "sponge:sponge",
             "minecraft:obsidian": "default:obsidian",
             "minecraft:glowstone": "default:glowstone",
@@ -1519,7 +1792,7 @@
             "minecraft:enchanting_table": "x_enchanting:table",
             "minecraft:brewing_stand": "brewing:stand",
             "minecraft:armor_stand": "3d_armor_stand:armor_stand",
-            "minecraft:flower_pot": "flowers:pot",
+            "minecraft:flower_pot": "flowerpot:pot",
             "minecraft:painting": "painting:painting",
             "minecraft:item_frame": "itemframes:frame",
         };
@@ -1619,6 +1892,8 @@
         let isWorldEdit = false;
         let userResolutionLocked = false;
         let currentGeometry = null;
+        let customConvertEnabled = false;
+        let customConvertEntries = [];
 
         // ========== DOM ==========
         const dropZone = document.getElementById('dropZone');
@@ -1632,6 +1907,11 @@
         const settingsNBT = document.getElementById('settingsNBT');
         const colorModeSelect = document.getElementById('colorMode');
         const blockIdGroup = document.getElementById('blockIdGroup');
+        const customConvertCheckbox = document.getElementById('customConvertEnabled');
+        const customConvertList = document.getElementById('customConvertList');
+        const customConvertAddBtn = document.getElementById('customConvertAddBtn');
+        const customConvertHint = document.getElementById('customConvertHint');
+        const unknownBlocksSection = document.getElementById('unknownBlocksSection');
 
         // Track if the user manually edited the resolution so we don't overwrite it on the next file
         resolutionInput.addEventListener('input', () => { userResolutionLocked = true; });
@@ -1652,10 +1932,13 @@
                 settingsNBT.classList.remove('visible');
             } else {
                 settings3D.classList.remove('visible');
+                // 3Dモデル以外の場合は常にsettingsNBTを表示（カスタム変換のため）
+                settingsNBT.classList.add('visible');
+                // 未対応ブロックがある場合のみ未対応ブロックセクションを表示
                 if (Object.keys(unknownBlocks).length > 0) {
-                    settingsNBT.classList.add('visible');
+                    unknownBlocksSection.style.display = 'block';
                 } else {
-                    settingsNBT.classList.remove('visible');
+                    unknownBlocksSection.style.display = 'none';
                 }
             }
         }
@@ -1876,16 +2159,54 @@
         function loadSchem(data) {
             const nbt = new NBTReader(data.buffer).parse();
 
-            // Sponge Schematic fields
-            const width = nbt.Width;
-            const height = nbt.Height;
-            const length = nbt.Length;
-            const palette = nbt.Palette;
-            const blockData = nbt.BlockData;
+            // Determine schematic version and get the correct data source
+            // v3: data is nested under "Schematic" tag with Blocks.Data and Blocks.Palette
+            // v2: data is at root level with BlockData and Palette
+            let schematic = nbt;
+            let version = 2;
 
-            if (width === undefined || height === undefined || length === undefined || !palette || !blockData) {
-                throw new Error('Invalid .schem file format: Missing required fields');
+            // Check for v3 format (nested under Schematic tag)
+            if (nbt.Schematic) {
+                schematic = nbt.Schematic;
+                version = schematic.Version || 3;
+                log(`Sponge Schematic v${version} フォーマットを検出`, 'info');
+            } else if (nbt.Version) {
+                version = nbt.Version;
+                log(`Sponge Schematic v${version} フォーマットを検出`, 'info');
             }
+
+            // Sponge Schematic fields
+            const width = schematic.Width;
+            const height = schematic.Height;
+            const length = schematic.Length;
+
+            // v3 uses Blocks.Palette and Blocks.Data, v2 uses Palette and BlockData
+            let palette, blockData;
+            if (version >= 3 && schematic.Blocks) {
+                palette = schematic.Blocks.Palette;
+                blockData = schematic.Blocks.Data;
+                log('v3形式: Blocks.Palette と Blocks.Data を使用', 'info');
+            } else {
+                palette = schematic.Palette;
+                blockData = schematic.BlockData;
+            }
+
+            if (width === undefined || height === undefined || length === undefined) {
+                // Debug: show what fields are available
+                const availableFields = Object.keys(schematic).join(', ');
+                log(`利用可能なフィールド: ${availableFields}`, 'warning');
+                throw new Error('Invalid .schem file format: Missing dimension fields (Width/Height/Length)');
+            }
+
+            if (!palette) {
+                throw new Error('Invalid .schem file format: Missing Palette');
+            }
+
+            if (!blockData) {
+                throw new Error('Invalid .schem file format: Missing BlockData');
+            }
+
+            log(`サイズ: ${width}x${height}x${length}`, 'info');
 
             // Invert palette: ID -> Name
             const idToName = {};
@@ -1915,15 +2236,27 @@
                 const name = idToName[blockId];
 
                 if (name && name !== 'minecraft:air' && name !== 'air' && !name.endsWith(':air')) {
-                    // Index = (y * Length + z) * Width + x
-                    const y = Math.floor(i / (width * length));
-                    const rem = i % (width * length);
-                    const z = Math.floor(rem / width);
-                    const x = rem % width;
+                    // v2: Index = (y * Length + z) * Width + x (YZX order)
+                    // v3: Index = x + z * Width + y * Width * Length (XZY order)
+                    let x, y, z;
+                    if (version >= 3) {
+                        // v3 XZY order
+                        x = i % width;
+                        z = Math.floor(i / width) % length;
+                        y = Math.floor(i / (width * length));
+                    } else {
+                        // v2 YZX order
+                        y = Math.floor(i / (width * length));
+                        const rem = i % (width * length);
+                        z = Math.floor(rem / width);
+                        x = rem % width;
+                    }
 
                     blocks.push([x, y, z, name]);
                 }
             }
+
+            log(`${blocks.length}個のブロックを読み込みました`, 'success');
             return blocks;
         }
 
@@ -2541,8 +2874,20 @@
 
                 let cmd, param2;
                 if (isWorldEdit) {
-                    // WorldEdit形式: ブロックIDはそのまま使用、param2は5番目の要素
-                    cmd = name;
+                    // WorldEdit形式: カスタム変換をチェック、なければそのまま使用
+                    let blockName = name;
+                    if (!blockName.includes(':')) {
+                        blockName = 'default:' + blockName;
+                    }
+                    // カスタム変換をチェック（minecraft:プレフィックスも試す）
+                    const minecraftName = 'minecraft:' + blockName.replace(/^[^:]+:/, '');
+                    if (userMappings[blockName] !== undefined) {
+                        cmd = userMappings[blockName];
+                    } else if (userMappings[minecraftName] !== undefined) {
+                        cmd = userMappings[minecraftName];
+                    } else {
+                        cmd = name;
+                    }
                     param2 = block[4] || 0;
                 } else {
                     // Minecraft形式: マッピングを通す
@@ -2670,6 +3015,9 @@
         }
 
         // ========== Unknown Blocks ==========
+        // multicraft_items.jsのIDセットをキャッシュ
+        const validMulticraftIds = new Set(allItems.map(item => item.id));
+
         function findUnknown(blocks) {
             const unknown = {};
             for (const b of blocks) {
@@ -2685,6 +3033,50 @@
             }
             return unknown;
         }
+
+        // WorldEdit (.we) ファイル用の未対応ブロック検出
+        // multicraft_items.jsに存在しないブロックIDを検出
+        function findUnknownWorldEdit(blocks) {
+            const unknown = {};
+            for (const b of blocks) {
+                const name = b[3];
+                // airブロックはスキップ
+                if (name === 'air' || name.endsWith(':air')) continue;
+
+                // multicraft_items.jsに存在するかチェック
+                if (!validMulticraftIds.has(name) && !unknown[name]) {
+                    unknown[name] = blocks.filter(x => x[3] === name).length;
+                }
+            }
+            return unknown;
+        }
+
+        // WorldEdit用の未対応ブロック表示
+        function renderUnknownBlocksWorldEdit(unknown) {
+            if (Object.keys(unknown).length === 0) {
+                unknownList.innerHTML = '<div class="empty-state">未対応ブロックなし</div>';
+                return;
+            }
+
+            const sorted = Object.entries(unknown).sort((a, b) => b[1] - a[1]);
+            unknownList.innerHTML = sorted.map(([name, count]) => {
+                return `
+                <div class="unknown-item">
+                    <div>
+                        <div class="unknown-name">${name}</div>
+                        <div class="unknown-count">${count}個</div>
+                    </div>
+                    <div class="autocomplete-wrapper">
+                        <input type="text" class="unknown-input" data-block="${name}" placeholder="変換先を入力">
+                        <div class="autocomplete-list"></div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+
+            unknownList.querySelectorAll('.unknown-input').forEach(setupAutocomplete);
+        }
+
 
         function renderUnknownBlocks(unknown) {
             if (Object.keys(unknown).length === 0) {
@@ -2717,10 +3109,281 @@
             for (const input of unknownList.querySelectorAll('.unknown-input')) {
                 const name = input.dataset.block;
                 const val = input.value.trim();
-                if (val === '') userMappings[name] = name.replace('minecraft:', 'default:');
+                if (val === '') {
+                    // WorldEditファイルの場合は元のブロックIDをそのまま使う
+                    // Minecraftファイルの場合はminecraft:をdefault:に置換
+                    if (isWorldEdit) {
+                        userMappings[name] = name;
+                    } else {
+                        userMappings[name] = name.replace('minecraft:', 'default:');
+                    }
+                }
                 else if (val.toLowerCase() === 'air') userMappings[name] = null;
                 else userMappings[name] = val;
             }
+
+            // カスタム変換マッピングを統合（優先度高い）
+            const customMappings = collectCustomMappings();
+            if (customMappings === null) {
+                return false; // 重複エラー
+            }
+            Object.assign(userMappings, customMappings);
+            return true;
+        }
+
+        // ========== Export/Import Unknown Blocks ==========
+        const exportUnknownBtn = document.getElementById('exportUnknownBtn');
+        const importUnknownBtn = document.getElementById('importUnknownBtn');
+        const importModal = document.getElementById('importModal');
+        const importModalClose = document.getElementById('importModalClose');
+        const importCancelBtn = document.getElementById('importCancelBtn');
+        const importApplyBtn = document.getElementById('importApplyBtn');
+        const importTextarea = document.getElementById('importTextarea');
+
+        // エクスポート: 未対応ブロック一覧をクリップボードにコピー
+        exportUnknownBtn.addEventListener('click', async () => {
+            const inputs = unknownList.querySelectorAll('.unknown-input');
+            if (inputs.length === 0) {
+                log('エクスポートする未対応ブロックがありません', 'warning');
+                return;
+            }
+
+            const lines = [];
+            for (const input of inputs) {
+                const source = input.dataset.block;
+                const target = input.value.trim();
+                if (target) {
+                    lines.push(`${source} -> ${target}`);
+                } else {
+                    lines.push(`${source} -> `);
+                }
+            }
+
+            const text = lines.join('\n');
+            try {
+                await navigator.clipboard.writeText(text);
+                log(`${inputs.length}個の未対応ブロックをコピーしました`, 'success');
+                exportUnknownBtn.textContent = '✓';
+                setTimeout(() => { exportUnknownBtn.textContent = '📋'; }, 1500);
+            } catch (err) {
+                log(`コピー失敗: ${err.message}`, 'error');
+            }
+        });
+
+        // インポートモーダルを開く
+        importUnknownBtn.addEventListener('click', () => {
+            importTextarea.value = '';
+            importModal.classList.add('active');
+        });
+
+        // インポートモーダルを閉じる
+        function closeImportModal() {
+            importModal.classList.remove('active');
+        }
+        importModalClose.addEventListener('click', closeImportModal);
+        importCancelBtn.addEventListener('click', closeImportModal);
+        importModal.addEventListener('click', (e) => {
+            if (e.target === importModal) closeImportModal();
+        });
+
+        // インポートを適用
+        importApplyBtn.addEventListener('click', () => {
+            const text = importTextarea.value;
+            const lines = text.split('\n');
+            let appliedCount = 0;
+
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed) continue;
+
+                // "source -> target" 形式をパース
+                const match = trimmed.match(/^(.+?)\s*->\s*(.*)$/);
+                if (!match) continue;
+
+                const source = match[1].trim();
+                const target = match[2].trim();
+
+                // 該当する入力欄を探して値を設定
+                const input = unknownList.querySelector(`.unknown-input[data-block="${source}"]`);
+                if (input) {
+                    input.value = target;
+                    appliedCount++;
+                }
+            }
+
+            closeImportModal();
+            if (appliedCount > 0) {
+                log(`${appliedCount}個の変換先をインポートしました`, 'success');
+            } else {
+                log('インポートする変換先が見つかりませんでした', 'warning');
+            }
+        });
+
+        // ========== Custom Convert ==========
+        // 読み込んだブロックのリスト（変換元オートコンプリート用）
+        let loadedBlocks = [];
+
+        customConvertCheckbox.addEventListener('change', () => {
+            customConvertEnabled = customConvertCheckbox.checked;
+            const display = customConvertEnabled ? 'block' : 'none';
+            customConvertHint.style.display = display;
+            customConvertList.style.display = display;
+            customConvertAddBtn.style.display = display;
+
+            if (customConvertEnabled && customConvertEntries.length === 0) {
+                addCustomConvertEntry();
+            }
+        });
+
+        customConvertAddBtn.addEventListener('click', () => {
+            addCustomConvertEntry();
+        });
+
+        // 変換元用オートコンプリート（読み込んだファイルのブロックから）
+        function setupSourceAutocomplete(input) {
+            const wrapper = input.parentElement;
+            const list = wrapper.querySelector('.autocomplete-list');
+
+            input.addEventListener('input', () => {
+                const val = input.value.toLowerCase();
+                if (val.length < 1) {
+                    list.classList.remove('visible');
+                    return;
+                }
+
+                const matches = loadedBlocks.filter(block =>
+                    block.toLowerCase().includes(val)
+                ).slice(0, 10);
+
+                if (matches.length === 0) {
+                    list.classList.remove('visible');
+                    return;
+                }
+
+                list.innerHTML = matches.map(block => `
+                    <div class="autocomplete-item" data-id="${block}">
+                        <div class="item-id">${block}</div>
+                    </div>
+                `).join('');
+
+                list.classList.add('visible');
+            });
+
+            list.addEventListener('click', (e) => {
+                const item = e.target.closest('.autocomplete-item');
+                if (item) {
+                    input.value = item.dataset.id;
+                    list.classList.remove('visible');
+                }
+            });
+
+            input.addEventListener('blur', () => {
+                setTimeout(() => list.classList.remove('visible'), 200);
+            });
+        }
+
+        function addCustomConvertEntry() {
+            const entryId = Date.now();
+            customConvertEntries.push(entryId);
+
+            const entryHTML = `
+            <div class="custom-convert-entry" data-entry-id="${entryId}">
+                <div class="autocomplete-wrapper">
+                    <input type="text" class="unknown-input custom-convert-from" placeholder="変換元ブロック">
+                    <div class="autocomplete-list"></div>
+                </div>
+                <span class="custom-convert-arrow">→</span>
+                <div class="autocomplete-wrapper">
+                    <input type="text" class="unknown-input custom-convert-to" placeholder="変換先ブロック">
+                    <div class="autocomplete-list"></div>
+                </div>
+                <button class="custom-convert-remove-btn" data-remove-id="${entryId}">×</button>
+            </div>
+            `;
+
+            customConvertList.insertAdjacentHTML('beforeend', entryHTML);
+
+            // オートコンプリートを設定
+            const entry = customConvertList.querySelector(`[data-entry-id="${entryId}"]`);
+            // 変換元は読み込んだブロックから
+            setupSourceAutocomplete(entry.querySelector('.custom-convert-from'));
+            // 変換先はMulticraftのブロックから
+            setupAutocomplete(entry.querySelector('.custom-convert-to'));
+
+            // 削除ボタンのイベント
+            entry.querySelector('.custom-convert-remove-btn').addEventListener('click', function () {
+                removeCustomConvertEntry(parseInt(this.dataset.removeId));
+            });
+        }
+
+        function removeCustomConvertEntry(entryId) {
+            const entry = customConvertList.querySelector(`[data-entry-id="${entryId}"]`);
+            if (entry) entry.remove();
+            customConvertEntries = customConvertEntries.filter(id => id !== entryId);
+        }
+
+        // 読み込んだブロックリストを更新
+        function updateLoadedBlocks(blocks) {
+            const blockSet = new Set();
+            for (const b of blocks) {
+                let [base] = parseBlockState(b[3].toLowerCase());
+                if (!base.startsWith('minecraft:') && !base.includes(':')) {
+                    base = 'minecraft:' + base;
+                }
+                blockSet.add(base);
+            }
+            loadedBlocks = Array.from(blockSet).sort();
+        }
+
+        // 重複チェック付きのcollectCustomMappings
+        function collectCustomMappings() {
+            if (!customConvertEnabled) return {};
+
+            const mappings = {};
+            const duplicates = [];
+            const entries = customConvertList.querySelectorAll('.custom-convert-entry');
+
+            for (const entry of entries) {
+                const fromInput = entry.querySelector('.custom-convert-from');
+                const toInput = entry.querySelector('.custom-convert-to');
+
+                const from = fromInput.value.trim();
+                const to = toInput.value.trim();
+
+                // エラースタイルをリセット
+                fromInput.style.borderColor = '';
+
+                if (from) {
+                    // minecraft: プレフィックスを正規化
+                    let normalizedFrom = from;
+                    if (!normalizedFrom.includes(':')) {
+                        normalizedFrom = 'minecraft:' + normalizedFrom;
+                    }
+
+                    // 重複チェック
+                    if (mappings.hasOwnProperty(normalizedFrom)) {
+                        duplicates.push(from);
+                        fromInput.style.borderColor = '#d44';
+                        continue;
+                    }
+
+                    if (to === '') {
+                        // 変換先が空の場合はスキップ（変換しない）
+                        continue;
+                    } else if (to.toLowerCase() === 'air') {
+                        mappings[normalizedFrom] = null;
+                    } else {
+                        mappings[normalizedFrom] = to;
+                    }
+                }
+            }
+
+            if (duplicates.length > 0) {
+                log(`エラー: 変換元が重複しています: ${duplicates.join(', ')}`, 'error');
+                return null; // エラー時はnullを返す
+            }
+
+            return mappings;
         }
 
         // ========== Process ==========
@@ -2840,11 +3503,14 @@
                     current3DVoxels = [];
                     updateStatus('blockCount', currentBlocks.length);
                     log(`WorldEditファイル読み込み: ${currentBlocks.length}ブロック`, 'success');
-                    // WorldEdit形式はブロックIDがそのまま使えるので未対応チェック不要
-                    unknownBlocks = {};
+                    // WorldEdit形式はmulticraft_items.jsに存在しないブロックを未対応とする
+                    unknownBlocks = findUnknownWorldEdit(currentBlocks);
+                    if (Object.keys(unknownBlocks).length > 0) {
+                        renderUnknownBlocksWorldEdit(unknownBlocks);
+                        log(`未対応: ${Object.keys(unknownBlocks).length}種類`, 'warning');
+                    }
                     updateSettingsVisibility();
-                    convertBtn.disabled = false;
-                    previewBtn.disabled = false;
+                    updateLoadedBlocks(currentBlocks);
                     convertBtn.disabled = false;
                     previewBtn.disabled = false;
                 } else if (ext === 'schem') {
@@ -2868,6 +3534,7 @@
                             log(`未対応: ${Object.keys(unknownBlocks).length}種類`, 'warning');
                             updateSettingsVisibility();
                         }
+                        updateLoadedBlocks(currentBlocks);
                         convertBtn.disabled = false;
                         previewBtn.disabled = false;
                     } catch (e) {
@@ -2894,6 +3561,7 @@
                         log(`未対応: ${Object.keys(unknownBlocks).length}種類`, 'warning');
                         updateSettingsVisibility();
                     }
+                    updateLoadedBlocks(currentBlocks);
                     convertBtn.disabled = false;
                     previewBtn.disabled = false;
                 }
@@ -2943,7 +3611,9 @@
                 const blockId = document.getElementById('blockId').value || 'default:stone';
                 commands = generate3DModelCommands(current3DVoxels, blockId, scale);
             } else {
-                collectMappings();
+                if (!collectMappings()) {
+                    return; // 重複エラーがある場合は中止
+                }
                 commands = generateCommands(currentBlocks, scale);
             }
             updateStatus('commandCount', commands.length);
